@@ -1,15 +1,19 @@
 package com.donson.report
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 
 /**
- * Created by Administrator on 2015/9/10 0010.
+ * Created by bigdataTeam on 2015/9/10 0010.
  */
 object Utils {
   /**
    *   struct schema information
+   *
    *   SessionID  	          string   	会话标识'
         AdvertisersID       	int	广告主ID'
         ADOrderID           	int	广告ID'
@@ -69,53 +73,53 @@ object Utils {
         realip	              string	真实ip
         IsQualityApp	         int   	是否优选，1为优选
    */
-  def getSchema: StructType = {
-    StructType(StructField("SessionID", StringType)
-      :: StructField("AdvertisersID", StringType)
-      :: StructField("ADOrderID", StringType)
-      :: StructField("ADCreativeID", StringType)
-      :: StructField("ADPlatformProviderID", StringType)
-      :: StructField("SDKVersionNumber", StringType)
-      :: StructField("AdPlatformKey", StringType)
-      :: StructField("PutInModelType", StringType)
-      :: StructField("RequestMode", StringType)
-      :: StructField("ADPrice", StringType)
-      :: StructField("ADPPPrice", StringType)
-      :: StructField("RequestDate", StringType)
-      :: StructField("Ip", StringType)
-      :: StructField("AppID", StringType)
-      :: StructField("AppName", StringType)
-      :: StructField("Uuid", StringType)
-      :: StructField("Device", StringType)
-      :: StructField("Client", StringType)
-      :: StructField("OsVersion", StringType)
-      :: StructField("Density", StringType)
-      :: StructField("Pw", StringType)
-      :: StructField("Ph", StringType)
-      :: StructField("Long", StringType)
-      :: StructField("Lat", StringType)
-      :: StructField("ProvinceName", StringType)
-      :: StructField("CityName", StringType)
-      :: StructField("ISPID", StringType)
-      :: StructField("ISPName", StringType)
-      :: StructField("NetworkMannerID", StringType)
-      :: StructField("NetworkMannerName", StringType)
-      :: StructField("IsEffective", StringType)
-      :: StructField("IsBilling", StringType)
-      :: StructField("AdSpaceType", StringType)
-      :: StructField("AdSpaceTypeName", StringType)
-      :: StructField("DeviceType", StringType)
-      :: StructField("ProcessNode", StringType)
-      :: StructField("AppType", StringType)
-      :: StructField("District", StringType)
-      :: StructField("PayMode", StringType)
-      :: StructField("IsBid", StringType)
-      :: StructField("BidPrice", StringType)
-      :: StructField("WinPrice", StringType)
-      :: StructField("IsWin", StringType)
-      :: StructField("Cur", StringType)
-      :: StructField("Rate", StringType)
-      :: StructField("CnyWinPrice", StringType)
+  def getSchemaInfo: StructType = {
+    StructType(StructField("SessionID", StringType) // 0
+      :: StructField("AdvertisersID", StringType)   // 1
+      :: StructField("ADOrderID", StringType)       // 2
+      :: StructField("ADCreativeID", StringType)    // 3
+      :: StructField("ADPlatformProviderID", StringType)  // 4
+      :: StructField("SDKVersionNumber", StringType)   // 5
+      :: StructField("AdPlatformKey", StringType)      // 6
+      :: StructField("PutInModelType", StringType)     // 7
+      :: StructField("RequestMode", StringType)        // 8
+      :: StructField("ADPrice", StringType)            // 9
+      :: StructField("ADPPPrice", StringType)          // 10
+      :: StructField("RequestDate", StringType)        // 11
+      :: StructField("Ip", StringType)       // 12
+      :: StructField("AppID", StringType)    // 13
+      :: StructField("AppName", StringType)  // 14
+      :: StructField("Uuid", StringType)     // 15
+      :: StructField("Device", StringType)   // 16
+      :: StructField("Client", StringType)   // 17
+      :: StructField("OsVersion", StringType)// 18
+      :: StructField("Density", StringType)  // 19
+      :: StructField("Pw", StringType)    // 20
+      :: StructField("Ph", StringType)    // 21
+      :: StructField("Long", StringType)  // 22
+      :: StructField("Lat", StringType)   // 23
+      :: StructField("ProvinceName", StringType)  // 24
+      :: StructField("CityName", StringType)      // 25
+      :: StructField("ISPID", StringType)         // 26
+      :: StructField("ISPName", StringType)       // 27
+      :: StructField("NetworkMannerID", StringType)// 28
+      :: StructField("NetworkMannerName", StringType)// 29
+      :: StructField("IsEffective", StringType)      // 30
+      :: StructField("IsBilling", StringType)        // 31
+      :: StructField("AdSpaceType", StringType)      // 32
+      :: StructField("AdSpaceTypeName", StringType)  // 33
+      :: StructField("DeviceType", StringType)       // 34
+      :: StructField("ProcessNode", StringType)      // 35
+      :: StructField("AppType", StringType)          // 36
+      :: StructField("District", StringType)         // 37
+      :: StructField("PayMode", StringType)          // 38
+      :: StructField("IsBid", StringType)            // 39
+      :: StructField("BidPrice", StringType)         // 40
+      :: StructField("WinPrice", StringType)         // 41
+      :: StructField("IsWin", StringType)            // 42
+      :: StructField("Cur", StringType)              // 43
+      :: StructField("Rate", StringType)             // 44
+      :: StructField("CnyWinPrice", StringType)      // 45
       :: Nil)
   }
 
@@ -126,13 +130,35 @@ object Utils {
    */
   def getRowRDD(rdd: RDD[String]): RDD[Row] = {
     rdd.map(_.split(",")).map {
-      prop => Row.apply(
+      prop => Row(
         prop(0), prop(1), prop(2), prop(3), prop(4), prop(5), prop(6), prop(7), prop(8), prop(9), prop(10),
         prop(11), prop(12), prop(13), prop(14), prop(15), prop(16), prop(17), prop(18), prop(19), prop(20),
         prop(21), prop(22), prop(23), prop(24), prop(25), prop(26), prop(27), prop(28), prop(29), prop(30),
         prop(31), prop(32), prop(33), prop(34), prop(35), prop(36), prop(37), prop(38), prop(39), prop(40),
-        prop(41), prop(42), prop(43), prop(44), prop(45),if(prop(8)==1 && prop(35).toInt>= 1 ) 1 else 0 ,
+        prop(41), prop(42), prop(43), prop(44), prop(45),
+
+        // 展示量
+        if(Nil != prop(8) && prop(8).toInt == 2 && prop(30).equals("1")) 1 else 0,
+        // 点击量
+        if(Nil != prop(8) && prop(8).toInt == 3 && prop(30).equals("1")) 1 else 0,
+        // 参与竞价数
+        if (Nil != prop(4) && prop(4).toInt >= 100000
+          && prop(30).equals("1") && prop(31).equals("1") && prop(39).equals("1")) 1 else 0,
+        // 竞价成功数
+        if (Nil != prop(4) && prop(4).toInt >= 100000
+          && prop(30).equals("1") && prop(31).equals("1") && prop(42).equals("1")) 1 else 0
       )
     }
+  }
+
+
+  /**
+   * 生成格式文件名称
+   * @return
+   */
+  def formateFileName : String = {
+    val dateFormat = new SimpleDateFormat("yyyyMMddHHmm")
+    val filename = dateFormat.format(new Date())
+    filename
   }
 }
