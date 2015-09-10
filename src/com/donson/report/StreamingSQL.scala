@@ -1,7 +1,6 @@
 package com.donson.report
 
-import java.text.SimpleDateFormat
-import java.util.{Date, Properties}
+import java.util.Properties
 
 import org.apache.log4j.Level
 import org.apache.spark.SparkConf
