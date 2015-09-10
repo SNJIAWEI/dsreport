@@ -10,64 +10,64 @@ import org.apache.spark.sql.types.{StringType, StructField, StructType}
 object Utils {
   /**
    *   struct schema information
-   *   SessionID???????????	string???	»á»°±êÊ¶'
-        AdvertisersID???????	int	¹ã¸æÖ÷ID'
-        ADOrderID???????????	int	¹ã¸æID'
-        ADCreativeID????????	int	¹ã¸æ´´ÒâID'
-        ADPlatformProviderID	int	¹ã¸æÆ½Ì¨ÉÌID'
-        SDKVersionNumber????	string???	SDK°æ±¾ºÅ'
-        AdPlatformKey???????	string???	Æ½Ì¨ÉÌKey'
-        PutInModelType??????	tinyint	Õë¶Ô¹ã¸æÖ÷µÄÍ¶·ÅÄ£Ê½£¬1£ºÕ¹Ê¾Á¿Í¶·Å£»2£ºµã»÷Á¿Í¶·Å
-        RequestMode?????????	tinyint	Êı¾İÇëÇó·½Ê½£¨1:ÇëÇó¡¢2:Õ¹Ê¾¡¢3:µã»÷£©'
-        ADPrice?????????????	double???	¹ã¸æ¼Û¸ñ'
-        ADPPPrice???????????	double???	Æ½Ì¨ÉÌ¼Û¸ñ'
-        RequestDate?????????	string???	ÇëÇóÊ±¼ä£¬¸ñÊ½Îª£ºYYYY/mm/dd  hh:mm:ss
-        Ip??????????????????	string???	Éè±¸ÓÃ»§µÄÕæÊµIPµØÖ·'
-        AppID???????????????	string???	Ó¦ÓÃID'
-        AppName?????????????	string???	Ó¦ÓÃÃû³Æ'
-        Uuid????????????????	string???	Éè±¸Î¨Ò»±êÊ¶£¬±ÈÈçimei»òÕßandroididµÈ'
-        Device??????????????	string???	Éè±¸ĞÍºÅ£¬ÈçHTC¡¢iPhone'
-        Client??????????????	tinyint	Éè±¸ÀàĞÍ
-        OsVersion???????????	string???	Éè±¸²Ù×÷ÏµÍ³°æ±¾£¬Èç4.0'
-        Density?????????????	string???	Éè±¸ÆÁÄ»µÄÃÜ¶È
-        Pw??????????????????	int???	Éè±¸ÆÁÄ»¿í¶È'
-        Ph??????????????????	int???	Éè±¸ÆÁÄ»¸ß¶È'
-        Long????????????????	string???	Éè±¸ËùÔÚ¾­¶È'
-        Lat?????????????????	string???	Éè±¸ËùÔÚÎ³¶È'
-        ProvinceName????????	string???	Éè±¸ËùÔÚÊ¡·İÃû³Æ'
-        CityName????????????	string???	Éè±¸ËùÔÚ³ÇÊĞÃû³Æ'
-        ISPID???????????????	tinyint	ÔËÓªÉÌID'
-        ISPName?????????????	string???	ÔËÓªÉÌÃû³Æ'
-        NetworkMannerID?????	tinyint	ÁªÍø·½Ê½ID'
-        NetworkMannerName???	string???	ÁªÍø·½Ê½Ãû³Æ'
-        IsEffective?????????	char(1)	ÓĞĞ§±êÊ¶£¨ÓĞĞ§Ö¸¿ÉÒÔÕı³£¼Æ·ÑµÄ£©(0£ºÎŞĞ§£»1£ºÓĞĞ§)
-        IsBilling???????????	char(1)	ÊÇ·ñÊÕ·Ñ£¨0£ºÎ´ÊÕ·Ñ£»1£ºÒÑÊÕ·Ñ£©
-        AdSpaceType?????????	tinyint	¹ã¸æÎ»ÀàĞÍ£¨1£ºBanner£»2£º²åÆÁ£»3£ºÈ«ÆÁ£©
-        AdSpaceTypeName?????	string???	¹ã¸æÎ»ÀàĞÍÃû³Æ£¨Banner¡¢²åÆÁ¡¢È«ÆÁ£©
-        DeviceType??????????	tinyint	Éè±¸ÀàĞÍ£¨1£ºÊÖ»ú£»2£ºÆ½°å£©
-        ProcessNode?????????	tinyint	Á÷³Ì½Úµã£¨1£ºÇëÇóÁ¿KPI£»2£ºÓĞĞ§ÇëÇó£»3£º¹ã¸æÇëÇó£©
-        AppType?????????????	tinyint	Ó¦ÓÃÀàĞÍID'
-        District????????????	string???	Éè±¸ËùÔÚÏØÃû³Æ'
-        PayMode?????????????	tinyint	Õë¶ÔÆ½Ì¨ÉÌµÄÖ§¸¶Ä£Ê½£¬1£ºÕ¹Ê¾Á¿Í¶·Å£»2£ºµã»÷Á¿Í¶·Å
-        IsBid???????????????	string???	ÊÇ·ñRTB'
-        BidPrice????????????	double	RTB¾º¼Û¼Û¸ñ'
-        WinPrice????????????	double	RTB¾º¼Û³É¹¦¼Û¸ñ'
-        IsWin???????????????	char(1)	ÊÇ·ñ¾º¼Û³É¹¦'
-        Cur	string	±ÒÖÖ£¬Values:USD|RMBµÈ'
-        Rate	double	»ãÂÊ',
-        CnyWinPrice	double	RTB¾º¼Û³É¹¦×ª»»³ÉÈËÃñ±ÒµÄ¼Û¸ñ'
-        imei	string	IMEI
-        mac	string	MAC
-        idfa	string	IDFA
-        openudid	string	OpenUDID
-        androidid	string	AndroidID
-        rtbprovince	string	rtbÇşµÀ´«¹ıÀ´µÄÓÃ»§ËùÔÚÊ¡·İ
-        rtbcity	string	rtbÇşµÀ´«¹ıÀ´µÄÓÃ»§ËùÔÚ³ÇÊĞ
-        rtbdistrict	string	rtbÇşµÀ´«¹ıÀ´µÄÓÃ»§ËùÔÚÇøÓò
-        rtbstreet	string	rtbÇşµÀ´«¹ıÀ´µÄÓÃ»§ËùÔÚ½ÖµÀ
-        storeurl	string	appÊĞ³¡ÏÂÔØµØÖ·
-        realip	string	ÕæÊµip
-        IsQualityApp	int???	ÊÇ·ñÓÅÑ¡£¬1ÎªÓÅÑ¡
+   *   SessionID  	          string   	ä¼šè¯æ ‡è¯†'
+        AdvertisersID       	int	å¹¿å‘Šä¸»ID'
+        ADOrderID           	int	å¹¿å‘ŠID'
+        ADCreativeID        	int	å¹¿å‘Šåˆ›æ„ID'
+        ADPlatformProviderID	int	å¹¿å‘Šå¹³å°å•†ID'
+        SDKVersionNumber    	string   	SDKç‰ˆæœ¬å·'
+        AdPlatformKey       	string   	å¹³å°å•†Key'
+        PutInModelType      	tinyint	é’ˆå¯¹å¹¿å‘Šä¸»çš„æŠ•æ”¾æ¨¡å¼ï¼Œ1ï¼šå±•ç¤ºé‡æŠ•æ”¾ï¼›2ï¼šç‚¹å‡»é‡æŠ•æ”¾
+        RequestMode         	tinyint	æ•°æ®è¯·æ±‚æ–¹å¼ï¼ˆ1:è¯·æ±‚ã€2:å±•ç¤ºã€3:ç‚¹å‡»ï¼‰'
+        ADPrice             	double   	å¹¿å‘Šä»·æ ¼'
+        ADPPPrice           	double   	å¹³å°å•†ä»·æ ¼'
+        RequestDate         	string   	è¯·æ±‚æ—¶é—´ï¼Œæ ¼å¼ä¸ºï¼šYYYY/mm/dd  hh:mm:ss
+        Ip                  	string   	è®¾å¤‡ç”¨æˆ·çš„çœŸå®IPåœ°å€'
+        AppID               	string   	åº”ç”¨ID'
+        AppName             	string   	åº”ç”¨åç§°'
+        Uuid                	string   	è®¾å¤‡å”¯ä¸€æ ‡è¯†ï¼Œæ¯”å¦‚imeiæˆ–è€…androididç­‰'
+        Device              	string   	è®¾å¤‡å‹å·ï¼Œå¦‚HTCã€iPhone'
+        Client              	tinyint	è®¾å¤‡ç±»å‹
+        OsVersion           	string   	è®¾å¤‡æ“ä½œç³»ç»Ÿç‰ˆæœ¬ï¼Œå¦‚4.0'
+        Density             	string   	è®¾å¤‡å±å¹•çš„å¯†åº¦
+        Pw                  	int   	è®¾å¤‡å±å¹•å®½åº¦'
+        Ph                  	int   	è®¾å¤‡å±å¹•é«˜åº¦'
+        Long                	string   	è®¾å¤‡æ‰€åœ¨ç»åº¦'
+        Lat                 	string   	è®¾å¤‡æ‰€åœ¨çº¬åº¦'
+        ProvinceName        	string   	è®¾å¤‡æ‰€åœ¨çœä»½åç§°'
+        CityName            	string   	è®¾å¤‡æ‰€åœ¨åŸå¸‚åç§°'
+        ISPID               	tinyint	è¿è¥å•†ID'
+        ISPName             	string   	è¿è¥å•†åç§°'
+        NetworkMannerID     	tinyint	è”ç½‘æ–¹å¼ID'
+        NetworkMannerName   	string   	è”ç½‘æ–¹å¼åç§°'
+        IsEffective         	char(1)	æœ‰æ•ˆæ ‡è¯†ï¼ˆæœ‰æ•ˆæŒ‡å¯ä»¥æ­£å¸¸è®¡è´¹çš„ï¼‰(0ï¼šæ— æ•ˆï¼›1ï¼šæœ‰æ•ˆ)
+        IsBilling           	char(1)	æ˜¯å¦æ”¶è´¹ï¼ˆ0ï¼šæœªæ”¶è´¹ï¼›1ï¼šå·²æ”¶è´¹ï¼‰
+        AdSpaceType         	tinyint	å¹¿å‘Šä½ç±»å‹ï¼ˆ1ï¼šBannerï¼›2ï¼šæ’å±ï¼›3ï¼šå…¨å±ï¼‰
+        AdSpaceTypeName     	string   	å¹¿å‘Šä½ç±»å‹åç§°ï¼ˆBannerã€æ’å±ã€å…¨å±ï¼‰
+        DeviceType          	tinyint	è®¾å¤‡ç±»å‹ï¼ˆ1ï¼šæ‰‹æœºï¼›2ï¼šå¹³æ¿ï¼‰
+        ProcessNode         	tinyint	æµç¨‹èŠ‚ç‚¹ï¼ˆ1ï¼šè¯·æ±‚é‡KPIï¼›2ï¼šæœ‰æ•ˆè¯·æ±‚ï¼›3ï¼šå¹¿å‘Šè¯·æ±‚ï¼‰
+        AppType             	tinyint	åº”ç”¨ç±»å‹ID'
+        District            	string   	è®¾å¤‡æ‰€åœ¨å¿åç§°'
+        PayMode             	tinyint	é’ˆå¯¹å¹³å°å•†çš„æ”¯ä»˜æ¨¡å¼ï¼Œ1ï¼šå±•ç¤ºé‡æŠ•æ”¾ï¼›2ï¼šç‚¹å‡»é‡æŠ•æ”¾
+        IsBid               	string   	æ˜¯å¦RTB'
+        BidPrice            	double	RTBç«ä»·ä»·æ ¼'
+        WinPrice            	double	RTBç«ä»·æˆåŠŸä»·æ ¼'
+        IsWin               	char(1)	æ˜¯å¦ç«ä»·æˆåŠŸ'
+        Cur	                  string	å¸ç§ï¼ŒValues:USD|RMBç­‰'
+        Rate	                double	æ±‡ç‡',
+        CnyWinPrice	          double	RTBç«ä»·æˆåŠŸè½¬æ¢æˆäººæ°‘å¸çš„ä»·æ ¼'
+        imei	                string	IMEI
+        mac	                  string	MAC
+        idfa	                string	IDFA
+        openudid	            string	OpenUDID
+        androidid	            string	AndroidID
+        rtbprovince	          string	rtbæ¸ é“ä¼ è¿‡æ¥çš„ç”¨æˆ·æ‰€åœ¨çœä»½
+        rtbcity	              string	rtbæ¸ é“ä¼ è¿‡æ¥çš„ç”¨æˆ·æ‰€åœ¨åŸå¸‚
+        rtbdistrict	          string	rtbæ¸ é“ä¼ è¿‡æ¥çš„ç”¨æˆ·æ‰€åœ¨åŒºåŸŸ
+        rtbstreet	            string	rtbæ¸ é“ä¼ è¿‡æ¥çš„ç”¨æˆ·æ‰€åœ¨è¡—é“
+        storeurl	            string	appå¸‚åœºä¸‹è½½åœ°å€
+        realip	              string	çœŸå®ip
+        IsQualityApp	         int   	æ˜¯å¦ä¼˜é€‰ï¼Œ1ä¸ºä¼˜é€‰
    */
   def getSchema: StructType = {
     StructType(StructField("SessionID", StringType)
