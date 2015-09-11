@@ -26,7 +26,7 @@ object StreamingSQL {
     connectionProperties.setProperty("driver", "com.mysql.jdbc.Driver")
 
     val Array(zkQuorum, group, topics, numThreads, outurl) = args
-    val sparkConf = new SparkConf().setAppName("StreamingSQL") setMaster ("local[2]")
+    val sparkConf = new SparkConf().setAppName("StreamingSQL").setMaster ("local[2]")
     val ssc = new StreamingContext(sparkConf, Seconds(30)) /* duringtime  min */
     /*ssc.checkpoint("hdfs://master:9000/ck6")*/
     val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap
@@ -41,10 +41,12 @@ object StreamingSQL {
       rddDataFrame.write.parquet("hdfs://192.168.1.220:9000/donson/streaming/people" + Utils.formateFileName + ".parquet")
 
       val parquetFile = sqlContext.read.parquet("hdfs://192.168.1.220:9000/donson/streaming/people" + Utils.formateFileName + ".parquet")
-      parquetFile.registerTempTable("people")
+      parquetFile.registerTempTable("adloginfo")
 
       // 查询结果并存储到数据库中
-      val results = sqlContext.sql("SELECT * FROM people")
+      val results = sqlContext.sql("SELECT AdvertisersID,ADOrderID,ADCreativeID,ReqDate,ReqHour,sum(IsShow),sum(IsClick),sum(IsTakeBid),sum(IsSuccessBid) " +
+        "FROM adloginfo " +
+        "group by AdvertisersID,ADOrderID,ADCreativeID,ReqDate,ReqHour")
       // results.collect().foreach(println)
       results.write.mode(SaveMode.Append).jdbc("jdbc:mysql://192.168.1.129:3306/test", "donson1", connectionProperties)
     }
