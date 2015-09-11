@@ -29,22 +29,22 @@ object StreamingSQL {
     connectionProperties.setProperty("password", "123456")
     connectionProperties.setProperty("driver", "com.mysql.jdbc.Driver")
 
-    val sparkConf = new SparkConf().setAppName("StreamingSQL").setMaster("local[2]")
+    val sparkConf = new SparkConf().setAppName("StreamingSQL").setMaster("local")
     val ssc = new StreamingContext(sparkConf, Seconds(120))
     /*ssc.checkpoint("hdfs://master:9000/ck6")*/
 
     val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap
 
     val lines = KafkaUtils.createStream(ssc, zkQuorum, group, topicMap).map(_._2)
-    lines.foreachRDD { rdd =>
+    lines.filter(_.split(",").length >= 45).foreachRDD { rdd =>
       val sqlContext = SQLContext.getOrCreate(rdd.sparkContext)
       val schema = Utils.getSchemaInfo
 
       val rowRDD = Utils.getRowRDD(rdd)
       val rddDataFrame = sqlContext.createDataFrame(rowRDD, schema)
-      rddDataFrame.write.parquet("hdfs://192.168.1.220:9000/donson/streaming/report1" + Utils.formateFileName + ".parquet")
+      rddDataFrame.write.parquet("hdfs://192.168.1.220:9000/donson/streaming/report_1_" + Utils.formateFileName + ".parquet")
 
-      val parquetFile = sqlContext.read.parquet("hdfs://192.168.1.220:9000/donson/streaming/report1" + Utils.formateFileName + ".parquet")
+      val parquetFile = sqlContext.read.parquet("hdfs://192.168.1.220:9000/donson/streaming/report_1_" + Utils.formateFileName + ".parquet")
       parquetFile.registerTempTable("adloginfo")
       // cache table
 //      sqlContext.cacheTable("adloginfo")
